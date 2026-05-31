@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRT NEXUS - Core Dynamic AI v2</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+ <div id="sidebar" class="sidebar">
+    <button onclick="toggleMenu()" class="close-btn"><i class="fas fa-times"></i></button>
+ 
+        <div class="sidebar-content">
+    <p onclick="toggleProfileModal()"><i class="fas fa-user-cog"></i> Profile Settings</p>
+    
+    <a href="https://your-store-url.com" target="_blank" style="display:block; padding:10px 20px; color:#00f2fe; text-decoration:none;">
+        <i class="fas fa-store"></i> User Store
+    </a>
+    <a href="https://your-social-url.com" target="_blank" style="display:block; padding:10px 20px; color:#00f2fe; text-decoration:none;">
+        <i class="fas fa-share-alt"></i> Social Media
+    </a>
+    
+    <button onclick="logout()" class="sidebar-logout">Logout</button>
+</div>
+
+ </div>    
+        
+      
+   
+
+
+
+    <div id="banOverlay" class="ban-screen-overlay hidden">
+        <div class="ban-card">
+            <div class="ban-icon"><i class="fas fa-exclamation-triangle" style="color: var(--neon-red);"></i></div>
+            <h1 class="neon-red">ACCESS TERMINATED</h1>
+            <p id="banMessage">Your system access node has been permanently deactivated by the Administrator.</p>
+            <div class="ban-footer">Security Protocol Active</div>
+        </div>
+    </div>
+
+    <div id="authContainer" class="auth-overlay show">
+        <div class="auth-card">
+            <h2 class="neon-text">NEXUS</h2>
+            <p class="auth-subtitle">Secure Gateway Access</p>
+            
+            <div class="auth-tabs">
+                <button id="tabEmail" class="tab-btn active" onclick="switchAuthTab('email')">Email Base</button>
+                <button id="tabPhone" class="tab-btn" onclick="switchAuthTab('phone')">Secure OTP</button>
+            </div>
+
+            <div id="emailAuthSection" class="auth-fields">
+                <div class="input-field-group">
+                    <input type="email" id="authEmail" placeholder="Enter Registered Email">
+                </div>
+                <div class="input-field-group">
+                    <input type="password" id="authPassword" placeholder="Enter Access Password">
+                </div>
+                <div class="auth-actions">
+                    <button id="signInBtn" onclick="handleEmailAuth('login')">Sign In</button>
+                    <button id="registerBtn" onclick="handleEmailAuth('register')" class="secondary-btn">Register</button>
+                </div>
+            </div>
+
+            <div id="phoneAuthSection" class="auth-fields hidden">
+                <div class="phone-input-group">
+                    <input type="text" id="authPhone" placeholder="+977 98XXXXXXXX">
+                    <button id="sign-in-button" onclick="handlePhoneAuth()">Send Vector</button>
+                </div>
+                <input type="text" id="verificationCode" placeholder="Enter 6-Digit OTP Link" class="hidden">
+                <button id="verifyOtpBtn" onclick="handleOtpVerification()" class="hidden">Verify Key Code</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="appContainer">
+        
+        <div class="live-tracker-bar">
+            <span class="pulse-dot"></span>
+            <p id="systemStatusText">NEXUS MAINNET: ONLINE // SECURE DATA PIPELINE ATTACHED</p>
+        </div>
+
+        <header class="app-header">
+            <button class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+            <div class="header-user-badge" onclick="toggleProfileModal()">
+                <div class="animated-avatar-container">
+                    <div class="spinning-orbit"></div>
+                    <div class="glow-core-icon" id="navAvatarIcon"></div>
+                </div>
+                <div class="user-meta-data">
+                    <span id="navUserName">Initialising Node...</span>
+                    <small id="userRoleBadge" style="color: #00f2fe; font-size: 0.65rem; display: block; font-family: 'Orbitron';">USER</small>
+                </div>
+            </div>
+            <div class="app-brand-title">
+                <h1>SRT <span class="neon-text">NEXUS</span></h1>
+            </div>
+            <button class="logout-btn" onclick="logout()">OUT</button>
+        </header>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai-message system-init">
+                <div class="message-content">
+                 <button class="speak-btn" onclick="speakText(this)">
+            <i class="fas fa-volume-up"></i>
+        </button>
+                    <p class="ai-typing-effect">SYSTEM: Welcome back Operator. Core Groq Llama-3 System Pipeline initialized. Ask Nexus anything...</p>
+                </div>
+            </div>
+        </div>
+     
+        <div id="aiTypingIndicator" class="ai-typing-loader hidden">
+            <span></span><span></span><span></span> <small>Nexus is computing answer vector...</small>
+        </div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <button onclick="startLiveCommunication()"><i class="fas fa-microphone"></i></button>
+                <input type="text" id="userInput" placeholder="Type a message...">
+                <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="liveCommOverlay" class="modal-overlay hidden">
+        <div class="orb-container">
+            <button onclick="closeLiveComm()" class="orb-nav-btn left"><i class="fas fa-times"></i> EXIT</button>
+            <div id="orb" class="orb"></div>
+            <h2 class="orb-status">AI LISTENING...</h2>
+            <button onclick="toggleMute()" id="muteBtn" class="orb-nav-btn right"><i class="fas fa-microphone-slash"></i> MUTE</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal-overlay">
+        <div class="modal-box glass">
+            <h3>Matrix Identity Node</h3>
+            <div class="animated-avatar-container large-avatar">
+                <div class="spinning-orbit"></div>
+                <div class="glow-core-icon" id="modalAvatarIcon"></div>
+            </div>
+            <p style="font-size: 0.75rem; color:#00f2fe; font-family: 'Orbitron'; text-transform: uppercase; margin-bottom:15px; letter-spacing: 2px;">Verified Security Cluster</p>
+            <input type="text" id="profileName" placeholder="Customize Client Identity Name">
+            <input type="text" id="profilePhone" placeholder="Bind Contact Phone Vector">
+            <input type="password" id="newPassword" placeholder="Inject New Access Password">
+            <div class="modal-buttons">
+                <button onclick="saveProfileChanges()">Commit Changes</button>
+                <button onclick="toggleProfileModal()" class="cancel-btn">Abort</button>
+            </div>
+            <button id="adminPanelLink" class="admin-toggle-btn hidden" onclick="openAdminPanel()">LAUNCH ADMIN SYSTEM CONSOLE</button>
+        </div>
+    </div>
+    
+    <div id="adminPanel" class="modal-overlay">
+        <div class="admin-box">
+            <div class="admin-header">
+                <h2>CORE MASTER CONTROL ENGINE</h2>
+                <button onclick="closeAdminPanel()" class="close-admin"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="admin-layout">
+                <div class="user-list-pane">
+                    <h3>Active Network Nodes</h3>
+                    <div id="adminUserList" class="admin-user-list"></div>
+                </div>
+                <div class="user-details-pane" id="userDetailsPane">
+                    <h3>Select a targeted user node matrix to view live logs and deploy intercept actions.</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
